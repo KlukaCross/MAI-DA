@@ -9,7 +9,6 @@ int main() {
     std::cin.tie(0);
 
     TVector<TMD5String*> elems;
-    elems.Reserve(1000000);
     Parser(elems);
 
     radix_sort(elems);
