@@ -5,7 +5,11 @@
 #include "parser.hpp"
 
 int main() {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(0);
+
     TVector<TMD5String*> elems;
+    elems.Reserve(1000000);
     Parser(elems);
 
     radix_sort(elems);

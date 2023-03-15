@@ -2,9 +2,9 @@
 #include <cmath>
 
 const unsigned int KEY_BITS = 128;
-const unsigned int MASK_SIZE = 8;
+const unsigned int MASK_SIZE = 16;
 
-void counting_sort(TVector<TMD5String*> &elems, unsigned __int128 mask, size_t shift_count) {
+void counting_sort(TVector<TMD5String*> &elems, TVector<TMD5String*> &result, unsigned __int128 mask, size_t shift_count) {
     if (elems.Empty()) {
         return;
     }
@@ -20,14 +20,11 @@ void counting_sort(TVector<TMD5String*> &elems, unsigned __int128 mask, size_t s
         tmp[i] += tmp[i-1];
     }
 
-    TVector<TMD5String*> res(elems.Size(), nullptr);
     for (int i = elems.Size() - 1; i >= 0; --i) {
         unsigned __int128 sort_key = (elems[i]->GetIntKey() & mask) >> (shift_count*MASK_SIZE);
         size_t pos = tmp[sort_key]--;
-        res[pos-1] = elems[i];
+        result[pos-1] = elems[i];
     }
-
-    elems = std::move(res);
 }
 
 void radix_sort(TVector<TMD5String*> &elems) {
@@ -35,8 +32,13 @@ void radix_sort(TVector<TMD5String*> &elems) {
     for (unsigned int i = 0; i < MASK_SIZE-1; ++i) {
         mask = (mask << 1) | 1;
     }
+    TVector<TMD5String*> tmp(elems.Size(), nullptr);
     for (unsigned int i = 0; i < KEY_BITS/MASK_SIZE; ++i) {
-        counting_sort(elems, mask, i);
+        if ((i & 1) == 0) {
+            counting_sort(elems, tmp, mask, i);
+        } else {
+            counting_sort(tmp, elems, mask, i);
+        }
         mask <<= MASK_SIZE;
     }
 }

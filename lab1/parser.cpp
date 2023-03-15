@@ -1,9 +1,16 @@
 #include "parser.hpp"
 #include <iostream>
+#include <fstream>
 
 void Parser(TVector<TMD5String*>& elems) {
+    //std::ifstream in;
+    //in.open("test");
+
     std::string line;
     while (std::getline(std::cin, line, '\n')) {
+        if (line.size() < HEX_BYTES_NUMBER) {
+            continue;
+        }
         std::string key = line.substr(0, HEX_BYTES_NUMBER);;
         std::string value;
         if (line.size() > HEX_BYTES_NUMBER+1) {

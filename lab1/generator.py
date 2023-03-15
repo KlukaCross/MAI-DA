@@ -3,10 +3,11 @@ import random
 import string
 import secrets
 
-TEST_COUNT = 6
+TEST_COUNT = 8
 MIN_STRING_SIZE = 0
 MAX_STRING_SIZE = 64
 NUMBER_SIZE = 32
+EMPTY_LINE_CHANCE = 0.01
 
 
 def get_random_string():
@@ -34,6 +35,9 @@ def main():
 
         line_count = lines[enum]
         for _ in range(line_count):
+            if EMPTY_LINE_CHANCE >= random.random():
+                test.append(("", ""))
+                continue
             key = get_random_number()
             value = get_random_string()
             test.append((key, value))
@@ -41,9 +45,16 @@ def main():
         test_name = "{}/{:02d}".format(test_dir, test_count)
         with open(f'{test_name}.t', 'w') as ftest:
             for key, value in test:
-                ftest.write(f'{key}\t{value}\n')
+                if len(key) == 0:
+                    ftest.write('\n')
+                else:
+                    ftest.write(f'{key}\t{value}\n')
 
-        answer = sorted(test, key=lambda x: x[0])
+        answer = []
+        for key, value in test:
+            if len(key) != 0:
+                answer.append((key, value))
+        answer = sorted(answer, key=lambda x: x[0])
         with open(f'{test_name}.a', 'w') as ftest:
             for key, value in answer:
                 ftest.write(f'{key}\t{value}\n')

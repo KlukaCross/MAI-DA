@@ -20,6 +20,7 @@ public:
     TVector<T>& operator=(TVector<T>&& other);
     T* Begin();
     T* End();
+    void Reserve(unsigned int new_pool_size);
 private:
     T* buffer;
     unsigned int pool_size;
@@ -27,6 +28,19 @@ private:
     void GrowBuffer();
     const unsigned int BUFFER_GROW_COEFFICIENT = 2;
 };
+
+template<typename T>
+void TVector<T>::Reserve(unsigned int new_pool_size) {
+    T* new_buf = new T[new_pool_size];
+
+    for (unsigned int i = 0; i < pool_size; ++i) {
+        new_buf[i] = buffer[i];
+    }
+
+    delete[] buffer;
+    pool_size = new_pool_size;
+    buffer = new_buf;
+}
 
 template<typename T>
 TVector<T>& TVector<T>::operator=(TVector<T> &&other) {
