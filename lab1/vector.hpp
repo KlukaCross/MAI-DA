@@ -5,6 +5,7 @@ template<typename T>
 class TVector {
 public:
     TVector();
+    TVector(unsigned int size);
     ~TVector();
     unsigned int Size();
     bool Empty();
@@ -15,6 +16,7 @@ public:
     T& Front();
     T& Get(unsigned int pos);
     T& operator[](unsigned int pos);
+    TVector<T>& operator=(TVector<T>&& other);
 private:
     T* buffer;
     unsigned int pool_size;
@@ -24,9 +26,30 @@ private:
 };
 
 template<typename T>
+TVector<T>& TVector<T>::operator=(TVector<T> &&other) {
+    if (this != &other) {
+        delete[] buffer;
+        buffer = other.buffer;
+        size = other.size;
+        pool_size = other.pool_size;
+        other.buffer = nullptr;
+        other.size = 0;
+        other.pool_size = 0;
+    }
+    return *this;
+}
+
+template<typename T>
 TVector<T>::TVector() {
     buffer = new T[1];
     pool_size = 1;
+    size = 0;
+}
+
+template<typename T>
+TVector<T>::TVector(unsigned int size) {
+    buffer = new T[size];
+    pool_size = size;
     size = 0;
 }
 
