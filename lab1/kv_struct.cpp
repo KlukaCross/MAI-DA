@@ -18,7 +18,7 @@ char TMD5String::int_to_hex(__uint128_t c) {
     return '0';
 }
 
-unsigned __int128 TMD5String::hex_to_int128(std::string st) {
+unsigned __int128 TMD5String::hex_to_int128(std::string& st) {
     unsigned __int128 number = 0;
     for (unsigned int i = 0; i < HEX_BYTES_NUMBER-1; ++i) {
         unsigned __int128 hex = hex_to_int(st[i]);
@@ -41,7 +41,7 @@ void TMD5String::int128_to_hex(__uint128_t number, char st[HEX_BYTES_NUMBER]) {
     }
 }
 
-TMD5String::TMD5String(std::string key, std::string value) {
+TMD5String::TMD5String(std::string& key, std::string& value) {
     this->key = hex_to_int128(key);
     for (unsigned int i = 0; i < VALUE_BYTES_NUMBER; ++i) {
         if (value.size() <= i) {
