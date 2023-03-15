@@ -1,5 +1,5 @@
-#ifndef LAB1_KV_STRUCT_HPP
-#define LAB1_KV_STRUCT_HPP
+#ifndef KV_STRUCT_HPP
+#define KV_STRUCT_HPP
 #include <string>
 
 const unsigned int HEX_BYTES_NUMBER = 32;
@@ -7,10 +7,10 @@ const unsigned int VALUE_BYTES_NUMBER = 64;
 
 class TMD5String {
 private:
-    unsigned __int128 hex_to_int(char c);
-    char int_to_hex(unsigned __int128 c);
-    unsigned __int128 hex_to_int128(std::string& st);
-    void int128_to_hex(unsigned __int128 number, char st[HEX_BYTES_NUMBER]);
+    unsigned __int128 HexToInt(char c);
+    char IntToHex(unsigned __int128 c);
+    unsigned __int128 HexToInt128(std::string& st);
+    void Int128ToHex(unsigned __int128 number, char st[HEX_BYTES_NUMBER]);
     unsigned __int128 key;
     char value[VALUE_BYTES_NUMBER];
 public:
@@ -20,4 +20,4 @@ public:
     std::string GetValue();
 };
 
-#endif //LAB1_KV_STRUCT_HPP
+#endif //KV_STRUCT_HPP

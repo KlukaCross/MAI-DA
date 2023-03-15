@@ -136,7 +136,7 @@ T &TVector<T>::Front() {
 
 template<typename T>
 T &TVector<T>::Back() {
-    return Get(size-1);
+    return Get(size - 1);
 }
 
 template<typename T>

@@ -17,7 +17,7 @@ def get_random_string():
 
 
 def get_random_number():
-    return secrets.token_hex(NUMBER_SIZE//2)
+    return secrets.token_hex(NUMBER_SIZE // 2)
 
 
 def main():
