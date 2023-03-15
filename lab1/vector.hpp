@@ -6,6 +6,7 @@ class TVector {
 public:
     TVector();
     TVector(unsigned int size, const T& value);
+    TVector(TVector<T>& other);
     ~TVector();
     unsigned int Size();
     bool Empty();
@@ -17,6 +18,8 @@ public:
     T& Get(unsigned int pos);
     T& operator[](unsigned int pos);
     TVector<T>& operator=(TVector<T>&& other);
+    T* Begin();
+    T* End();
 private:
     T* buffer;
     unsigned int pool_size;
@@ -40,6 +43,16 @@ TVector<T>& TVector<T>::operator=(TVector<T> &&other) {
 }
 
 template<typename T>
+T* TVector<T>::Begin() {
+    return &buffer[0];
+}
+
+template<typename T>
+T* TVector<T>::End() {
+    return &buffer[size];
+}
+
+template<typename T>
 TVector<T>::TVector() {
     buffer = new T[1];
     pool_size = 1;
@@ -51,8 +64,18 @@ TVector<T>::TVector(unsigned int size, const T& value) {
     buffer = new T[size];
     pool_size = size;
     this->size = size;
-    for (size_t i = 0; i < size; ++i) {
+    for (unsigned int i = 0; i < size; ++i) {
         buffer[i] = value;
+    }
+}
+
+template<typename T>
+TVector<T>::TVector(TVector<T> &other) {
+    pool_size = other.pool_size;
+    size = other.size;
+    buffer = new T[size];
+    for (unsigned int i = 0; i < other.size; ++i) {
+        buffer[i] = other.buffer[i];
     }
 }
 
@@ -116,7 +139,7 @@ template<typename T>
 void TVector<T>::GrowBuffer() {
     T* new_buf = new T[BUFFER_GROW_COEFFICIENT * pool_size];
 
-    for (int i = 0; i < pool_size; ++i) {
+    for (unsigned int i = 0; i < pool_size; ++i) {
         new_buf[i] = buffer[i];
     }
 

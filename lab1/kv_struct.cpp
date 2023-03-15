@@ -1,7 +1,9 @@
 #include "kv_struct.hpp"
 
+const size_t TRANSFORM_MASK_SIZE = 4;
+
 unsigned __int128 TMD5String::hex_to_int(char c) {
-    if (c >= '0' && c <= '9')
+    if (c <= '9')
         return c - '0';
     else if (c >= 'a' && c <= 'f')
         return 10 + c - 'a';
@@ -9,18 +11,18 @@ unsigned __int128 TMD5String::hex_to_int(char c) {
 }
 
 char TMD5String::int_to_hex(__uint128_t c) {
-    if (c >= 0 && c < 10)
+    if (c < 10)
         return '0' + c;
     else if (c > 9 && c < 16)
         return 'a' + c - 10;
     return '0';
 }
 
-unsigned __int128 TMD5String::hex_to_int128(const char st[HEX_BYTES_NUMBER]) {
+unsigned __int128 TMD5String::hex_to_int128(std::string st) {
     unsigned __int128 number = 0;
-    for (int i = 0; i < HEX_BYTES_NUMBER-1; ++i) {
+    for (unsigned int i = 0; i < HEX_BYTES_NUMBER-1; ++i) {
         unsigned __int128 hex = hex_to_int(st[i]);
-        number = (number | hex) << 4;
+        number = (number | hex) << TRANSFORM_MASK_SIZE;
     }
     unsigned __int128 hex = hex_to_int(st[HEX_BYTES_NUMBER-1]);
     number |= hex;
@@ -28,17 +30,25 @@ unsigned __int128 TMD5String::hex_to_int128(const char st[HEX_BYTES_NUMBER]) {
 }
 
 void TMD5String::int128_to_hex(__uint128_t number, char st[HEX_BYTES_NUMBER]) {
-    for (int i = 1; i <= HEX_BYTES_NUMBER; ++i) {
-        unsigned __int128 hex = number & (unsigned __int128)0b1111;
+    unsigned __int128 mask = 1;
+    for (unsigned int i = 0; i < TRANSFORM_MASK_SIZE-1; ++i) {
+        mask = (mask << 1) | 1;
+    }
+    for (unsigned int i = 1; i <= HEX_BYTES_NUMBER; ++i) {
+        unsigned __int128 hex = number & mask;
         number >>= 4;
         st[HEX_BYTES_NUMBER-i] = int_to_hex(hex);
     }
 }
 
-TMD5String::TMD5String(const char key[HEX_BYTES_NUMBER], const char value[VALUE_BYTES_NUMBER]) {
+TMD5String::TMD5String(std::string key, std::string value) {
     this->key = hex_to_int128(key);
-    for (int i = 0; i < VALUE_BYTES_NUMBER; ++i) {
-        this->value[i] = value[i];
+    for (unsigned int i = 0; i < VALUE_BYTES_NUMBER; ++i) {
+        if (value.size() <= i) {
+            this->value[i] = '\0';
+        } else {
+            this->value[i] = value[i];
+        }
     }
 }
 
@@ -53,8 +63,8 @@ std::string TMD5String::GetHexKey() {
 }
 
 std::string TMD5String::GetValue() {
-    size_t value_size = VALUE_BYTES_NUMBER;
-    for (size_t i = 0; i < VALUE_BYTES_NUMBER; ++i) {
+    unsigned int value_size = VALUE_BYTES_NUMBER;
+    for (unsigned int i = 0; i < VALUE_BYTES_NUMBER; ++i) {
         if (value[i] == '\0') {
             value_size = i;
             break;
