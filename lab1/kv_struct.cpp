@@ -53,6 +53,13 @@ std::string TMD5String::GetHexKey() {
 }
 
 std::string TMD5String::GetValue() {
-    return std::string(value, VALUE_BYTES_NUMBER);
+    size_t value_size = VALUE_BYTES_NUMBER;
+    for (size_t i = 0; i < VALUE_BYTES_NUMBER; ++i) {
+        if (value[i] == '\0') {
+            value_size = i;
+            break;
+        }
+    }
+    return std::string(value, value_size);
 }
 

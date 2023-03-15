@@ -5,7 +5,7 @@ template<typename T>
 class TVector {
 public:
     TVector();
-    TVector(unsigned int size);
+    TVector(unsigned int size, const T& value);
     ~TVector();
     unsigned int Size();
     bool Empty();
@@ -47,10 +47,13 @@ TVector<T>::TVector() {
 }
 
 template<typename T>
-TVector<T>::TVector(unsigned int size) {
+TVector<T>::TVector(unsigned int size, const T& value) {
     buffer = new T[size];
     pool_size = size;
-    size = 0;
+    this->size = size;
+    for (size_t i = 0; i < size; ++i) {
+        buffer[i] = value;
+    }
 }
 
 template<typename T>
