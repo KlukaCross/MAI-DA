@@ -4,8 +4,8 @@
 const unsigned int KEY_BITS = 128;
 const unsigned int MASK_SIZE = 16;
 
-void counting_sort(TVector<TMD5String*> &elems, TVector<TMD5String*> &result, unsigned __int128 mask,
-                   size_t shift_count, size_t max_elem)
+void CountingSort(TVector<TMD5String*> &elems, TVector<TMD5String*> &result, unsigned __int128 mask,
+                  size_t shift_count, size_t max_elem)
 {
     if (elems.Empty()) {
         return;
@@ -28,7 +28,7 @@ void counting_sort(TVector<TMD5String*> &elems, TVector<TMD5String*> &result, un
     }
 }
 
-void radix_sort(TVector<TMD5String*> &elems) {
+void RadixSort(TVector<TMD5String*> &elems) {
     unsigned __int128 mask = 1;
     for (unsigned int i = 0; i < MASK_SIZE - 1; ++i) {
         mask = (mask << 1) | 1;
@@ -39,9 +39,9 @@ void radix_sort(TVector<TMD5String*> &elems) {
 
     for (unsigned int i = 0; i < KEY_BITS / MASK_SIZE; ++i) {
         if ((i & 1) == 0) {
-            counting_sort(elems, tmp, mask, i, max_elem);
+            CountingSort(elems, tmp, mask, i, max_elem);
         } else {
-            counting_sort(tmp, elems, mask, i, max_elem);
+            CountingSort(tmp, elems, mask, i, max_elem);
         }
         mask <<= MASK_SIZE;
     }

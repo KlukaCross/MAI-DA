@@ -3,6 +3,6 @@
 #include "vector.hpp"
 #include "kv_struct.hpp"
 
-void radix_sort(TVector<TMD5String*> &elems);
+void RadixSort(TVector<TMD5String*> &elems);
 
 #endif //SORT_HPP

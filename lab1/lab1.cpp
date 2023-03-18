@@ -11,7 +11,7 @@ int main() {
     TVector<TMD5String*> elems;
     Parser(elems);
 
-    radix_sort(elems);
+    RadixSort(elems);
 
     for (unsigned int i = 0; i < elems.Size(); ++i) {
         std::cout << elems[i]->GetHexKey() << '\t' << elems[i]->GetValue() << '\n';
