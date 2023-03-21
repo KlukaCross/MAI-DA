@@ -30,10 +30,7 @@ void CountingSort(TVector<TMD5String*> &elems, TVector<TMD5String*> &result, uns
 }
 
 void RadixSort(TVector<TMD5String*> &elems) {
-    unsigned __int128 mask = 1;
-    for (unsigned short i = 0; i < MASK_SIZE - 1; ++i) {
-        mask = (mask << 1) | 1;
-    }
+    unsigned __int128 mask = std::pow(2, MASK_SIZE)-1;
 
     TVector<TMD5String*> tmp(elems.Size(), nullptr);
 
