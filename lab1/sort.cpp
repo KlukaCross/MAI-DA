@@ -4,16 +4,16 @@
 const unsigned int KEY_BITS = 128;
 const unsigned int MASK_SIZE = 16;
 
-void CountingSort(TVector<TMD5String*> &elems, TVector<TMD5String*> &result, unsigned __int128 mask,
-                  size_t shift_count, size_t max_elem)
+void CountingSort(TVector<TMD5String*> &elems, TVector<TMD5String*> &result, unsigned __int128 mask, size_t shift_count)
 {
     if (elems.Empty()) {
         return;
     }
-    TVector<size_t> tmp(max_elem, 0);
+    TVector<size_t> tmp(mask+1, 0);
 
     for (unsigned int i = 0; i < elems.Size(); ++i) {
-        unsigned __int128 sort_key = (elems[i]->GetIntKey() & mask) >> (shift_count * MASK_SIZE);
+        unsigned __int128 sort_key = elems[i]->GetIntKey() >> (shift_count * MASK_SIZE);
+        sort_key = sort_key & mask;
         ++tmp[sort_key];
     }
 
@@ -22,7 +22,8 @@ void CountingSort(TVector<TMD5String*> &elems, TVector<TMD5String*> &result, uns
     }
 
     for (int i = elems.Size() - 1; i >= 0; --i) {
-        unsigned __int128 sort_key = (elems[i]->GetIntKey() & mask) >> (shift_count * MASK_SIZE);
+        unsigned __int128 sort_key = elems[i]->GetIntKey() >> (shift_count * MASK_SIZE);
+        sort_key = sort_key & mask;
         size_t pos = tmp[sort_key]--;
         result[pos - 1] = elems[i];
     }
@@ -30,19 +31,17 @@ void CountingSort(TVector<TMD5String*> &elems, TVector<TMD5String*> &result, uns
 
 void RadixSort(TVector<TMD5String*> &elems) {
     unsigned __int128 mask = 1;
-    for (unsigned int i = 0; i < MASK_SIZE - 1; ++i) {
+    for (unsigned short i = 0; i < MASK_SIZE - 1; ++i) {
         mask = (mask << 1) | 1;
     }
 
-    size_t max_elem = std::pow(2, MASK_SIZE);
     TVector<TMD5String*> tmp(elems.Size(), nullptr);
 
-    for (unsigned int i = 0; i < KEY_BITS / MASK_SIZE; ++i) {
+    for (unsigned short i = 0; i < KEY_BITS / MASK_SIZE; ++i) {
         if ((i & 1) == 0) {
-            CountingSort(elems, tmp, mask, i, max_elem);
+            CountingSort(elems, tmp, mask, i);
         } else {
-            CountingSort(tmp, elems, mask, i, max_elem);
+            CountingSort(tmp, elems, mask, i);
         }
-        mask <<= MASK_SIZE;
     }
 }

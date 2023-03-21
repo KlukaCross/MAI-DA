@@ -20,8 +20,8 @@ int main()
     std::cout << "Count of lines is " << input.Size() << std::endl;
 
     std::chrono::time_point<std::chrono::system_clock> start_ts = std::chrono::system_clock::now();
-    radix_sort(input);
-    auto end_ts = std::chrono::system_clock::now();
+    RadixSort(input);
+    std::chrono::time_point end_ts = std::chrono::system_clock::now();
     uint64_t radix_sort_ts = std::chrono::duration_cast<std::chrono::microseconds>(end_ts - start_ts ).count();
 
     start_ts = std::chrono::system_clock::now();

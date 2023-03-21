@@ -17,7 +17,6 @@ public:
     T& Front();
     T& Get(unsigned int pos);
     T& operator[](unsigned int pos);
-    TVector<T>& operator=(TVector<T>&& other);
     T* Begin();
     T* End();
     void Reserve(unsigned int new_pool_size);
@@ -40,20 +39,6 @@ void TVector<T>::Reserve(unsigned int new_pool_size) {
     delete[] buffer;
     pool_size = new_pool_size;
     buffer = new_buf;
-}
-
-template<typename T>
-TVector<T>& TVector<T>::operator=(TVector<T> &&other) {
-    if (this != &other) {
-        delete[] buffer;
-        buffer = other.buffer;
-        size = other.size;
-        pool_size = other.pool_size;
-        other.buffer = nullptr;
-        other.size = 0;
-        other.pool_size = 0;
-    }
-    return *this;
 }
 
 template<typename T>
