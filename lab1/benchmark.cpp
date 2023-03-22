@@ -19,16 +19,16 @@ int main()
 
     std::cout << "Count of lines is " << input.Size() << std::endl;
 
-    std::chrono::time_point<std::chrono::system_clock> start_ts = std::chrono::system_clock::now();
+    std::chrono::time_point<std::chrono::system_clock> startTs = std::chrono::system_clock::now();
     RadixSort(input);
-    std::chrono::time_point end_ts = std::chrono::system_clock::now();
-    uint64_t radix_sort_ts = std::chrono::duration_cast<std::chrono::microseconds>(end_ts - start_ts ).count();
+    std::chrono::time_point endTs = std::chrono::system_clock::now();
+    uint64_t radixSortTs = std::chrono::duration_cast<std::chrono::microseconds>(endTs - startTs ).count();
 
-    start_ts = std::chrono::system_clock::now();
+    startTs = std::chrono::system_clock::now();
     std::stable_sort(input_stl.Begin(), input_stl.End(), cmp);
-    end_ts = std::chrono::system_clock::now();
+    endTs = std::chrono::system_clock::now();
 
-    uint64_t stl_sort_ts = std::chrono::duration_cast<std::chrono::microseconds>( end_ts - start_ts ).count();
-    std::cout << "Radix sort time: " << radix_sort_ts << DURATION_PREFIX << std::endl;
-    std::cout << "STL stable sort time: " << stl_sort_ts << DURATION_PREFIX << std::endl;
+    uint64_t stlSortTs = std::chrono::duration_cast<std::chrono::microseconds>(endTs - startTs ).count();
+    std::cout << "Radix sort time: " << radixSortTs << DURATION_PREFIX << std::endl;
+    std::cout << "STL stable sort time: " << stlSortTs << DURATION_PREFIX << std::endl;
 }

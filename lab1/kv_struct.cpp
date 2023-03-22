@@ -2,7 +2,7 @@
 
 const size_t TRANSFORM_MASK_SIZE = 4;
 
-unsigned __int128 TMD5String::HexToInt(char c) {
+Tuint128 TMD5String::HexToInt(char c) {
     if (c <= '9')
         return c - '0';
     else if (c >= 'a' && c <= 'f')
@@ -10,7 +10,7 @@ unsigned __int128 TMD5String::HexToInt(char c) {
     return 0;
 }
 
-char TMD5String::IntToHex(__uint128_t c) {
+char TMD5String::IntToHex(Tuint128 c) {
     if (c < 10)
         return '0' + c;
     else if (c > 9 && c < 16)
@@ -18,24 +18,24 @@ char TMD5String::IntToHex(__uint128_t c) {
     return '0';
 }
 
-unsigned __int128 TMD5String::HexToInt128(std::string& st) {
-    unsigned __int128 number = 0;
+Tuint128 TMD5String::HexToInt128(std::string& st) {
+    Tuint128 number = 0;
     for (unsigned int i = 0; i < HEX_BYTES_NUMBER - 1; ++i) {
-        unsigned __int128 hex = HexToInt(st[i]);
+        Tuint128 hex = HexToInt(st[i]);
         number = (number | hex) << TRANSFORM_MASK_SIZE;
     }
-    unsigned __int128 hex = HexToInt(st[HEX_BYTES_NUMBER - 1]);
+    Tuint128 hex = HexToInt(st[HEX_BYTES_NUMBER - 1]);
     number |= hex;
     return number;
 }
 
-void TMD5String::Int128ToHex(__uint128_t number, char st[HEX_BYTES_NUMBER]) {
-    unsigned __int128 mask = 1;
+void TMD5String::Int128ToHex(Tuint128 number, char st[HEX_BYTES_NUMBER]) {
+    Tuint128 mask = 1;
     for (unsigned int i = 0; i < TRANSFORM_MASK_SIZE - 1; ++i) {
         mask = (mask << 1) | 1;
     }
     for (unsigned int i = 1; i <= HEX_BYTES_NUMBER; ++i) {
-        unsigned __int128 hex = number & mask;
+        Tuint128 hex = number & mask;
         number >>= 4;
         st[HEX_BYTES_NUMBER-i] = IntToHex(hex);
     }
@@ -52,7 +52,7 @@ TMD5String::TMD5String(std::string& key, std::string& value) {
     }
 }
 
-unsigned __int128 TMD5String::GetIntKey() {
+Tuint128 TMD5String::GetIntKey() {
     return this->key;
 }
 
@@ -63,13 +63,13 @@ std::string TMD5String::GetHexKey() {
 }
 
 std::string TMD5String::GetValue() {
-    unsigned int value_size = VALUE_BYTES_NUMBER;
+    unsigned int valueSize = VALUE_BYTES_NUMBER;
     for (unsigned int i = 0; i < VALUE_BYTES_NUMBER; ++i) {
         if (value[i] == '\0') {
-            value_size = i;
+            valueSize = i;
             break;
         }
     }
-    return std::string(value, value_size);
+    return std::string(value, valueSize);
 }
 

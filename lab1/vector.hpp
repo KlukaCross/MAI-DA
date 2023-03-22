@@ -19,26 +19,26 @@ public:
     T& operator[](unsigned int pos);
     T* Begin();
     T* End();
-    void Reserve(unsigned int new_pool_size);
+    void Reserve(unsigned int newPoolSize);
 private:
     T* buffer;
-    unsigned int pool_size;
+    unsigned int poolSize;
     unsigned int size;
     void GrowBuffer();
     const unsigned int BUFFER_GROW_COEFFICIENT = 2;
 };
 
 template<typename T>
-void TVector<T>::Reserve(unsigned int new_pool_size) {
-    T* new_buf = new T[new_pool_size];
+void TVector<T>::Reserve(unsigned int newPoolSize) {
+    T* newBuf = new T[newPoolSize];
 
-    for (unsigned int i = 0; i < pool_size; ++i) {
-        new_buf[i] = buffer[i];
+    for (unsigned int i = 0; i < poolSize; ++i) {
+        newBuf[i] = buffer[i];
     }
 
     delete[] buffer;
-    pool_size = new_pool_size;
-    buffer = new_buf;
+    poolSize = newPoolSize;
+    buffer = newBuf;
 }
 
 template<typename T>
@@ -54,14 +54,14 @@ T* TVector<T>::End() {
 template<typename T>
 TVector<T>::TVector() {
     buffer = new T[1];
-    pool_size = 1;
+    poolSize = 1;
     size = 0;
 }
 
 template<typename T>
 TVector<T>::TVector(unsigned int size, const T& value) {
     buffer = new T[size];
-    pool_size = size;
+    poolSize = size;
     this->size = size;
     for (unsigned int i = 0; i < size; ++i) {
         buffer[i] = value;
@@ -70,7 +70,7 @@ TVector<T>::TVector(unsigned int size, const T& value) {
 
 template<typename T>
 TVector<T>::TVector(TVector<T> &other) {
-    pool_size = other.pool_size;
+    poolSize = other.poolSize;
     size = other.size;
     buffer = new T[size];
     for (unsigned int i = 0; i < other.size; ++i) {
@@ -81,13 +81,13 @@ TVector<T>::TVector(TVector<T> &other) {
 template<typename T>
 TVector<T>::~TVector() {
     delete[] buffer;
-    pool_size = 0;
+    poolSize = 0;
     size = 0;
 }
 
 template<typename T>
 void TVector<T>::PushBack(const T& value) {
-    if (size >= pool_size) {
+    if (size >= poolSize) {
         GrowBuffer();
     }
     buffer[size] = value;
@@ -136,14 +136,14 @@ void TVector<T>::Set(unsigned int pos, const T &value) {
 
 template<typename T>
 void TVector<T>::GrowBuffer() {
-    T* new_buf = new T[BUFFER_GROW_COEFFICIENT * pool_size];
+    T* new_buf = new T[BUFFER_GROW_COEFFICIENT * poolSize];
 
-    for (unsigned int i = 0; i < pool_size; ++i) {
+    for (unsigned int i = 0; i < poolSize; ++i) {
         new_buf[i] = buffer[i];
     }
 
     delete[] buffer;
-    pool_size = pool_size * BUFFER_GROW_COEFFICIENT;
+    poolSize = poolSize * BUFFER_GROW_COEFFICIENT;
     buffer = new_buf;
 }
 
