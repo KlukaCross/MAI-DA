@@ -23,8 +23,8 @@ void CountingSort(TVector<TMD5String*> &elems, TVector<TMD5String*> &result, Tui
     for (int i = elems.Size() - 1; i >= 0; --i) {
         Tuint128 sortKey = elems[i]->GetIntKey() >> (shiftCount * MASK_SIZE);
         sortKey = sortKey & mask;
-        size_t pos = tmp[sortKey]--;
-        result[pos - 1] = elems[i];
+        size_t pos = --tmp[sortKey];
+        result[pos] = elems[i];
     }
 }
 
