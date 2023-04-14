@@ -47,5 +47,6 @@ int main() {
             std::cout << "Error: " << e.what() << '\n';
         }
     }
+    delete tree;
     return 0;
 }
