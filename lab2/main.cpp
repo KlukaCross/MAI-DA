@@ -3,11 +3,6 @@
 #include "patricia.hpp"
 #include "custom_exception.hpp"
 
-void ToLower(std::string &s) {
-    std::transform(s.begin(), s.end(), s.begin(),
-                   [](unsigned char c){ return std::tolower(c); });
-}
-
 int main() {
     TPatricia *tree = new TPatricia();
     std::string action;
@@ -17,13 +12,11 @@ int main() {
                 std::string key;
                 uint64_t value;
                 std::cin >> key >> value;
-                ToLower(key);
                 tree->Add(key, value);
                 std::cout << "OK\n";
             } else if (action == "-") {
                 std::string key;
                 std::cin >> key;
-                ToLower(key);
                 tree->Erase(key);
                 std::cout << "OK\n";
             } else if (action == "!") {
@@ -40,7 +33,6 @@ int main() {
                 }
                 std::cout << "OK\n";
             } else {
-                ToLower(action);
                 uint64_t value = tree->At(action);
                 std::cout << "OK: " << value << '\n';
             }

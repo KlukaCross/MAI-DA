@@ -1,6 +1,17 @@
 #include "patricia.hpp"
 #include "custom_exception.hpp"
 
+bool CaseInsensitiveEqual(const std::string &str1, const std::string &str2) {
+    if (str1.size() != str2.size()) {
+        return false;
+    }
+    for (size_t i = 0; i < str1.size(); ++i) {
+        if (std::tolower(str1[i]) != std::tolower(str2[i]))
+            return false;
+    }
+    return true;
+}
+
 void TPatricia::Add(const std::string &key, const uint64_t &value) {
     if (!root) {
         root = new TNode(key, value, 0);
@@ -9,7 +20,7 @@ void TPatricia::Add(const std::string &key, const uint64_t &value) {
     }
 
     TNode *foundedNode = Find(key);
-    if (foundedNode->key == key) {
+    if (CaseInsensitiveEqual(foundedNode->key, key)) {
         throw TKeyAlreadyExists();
     }
     size_t newIndex = CalculateNewIndex(key, foundedNode->key);
@@ -25,7 +36,7 @@ TPatricia::TNode *TPatricia::Find(const std::string &key) {
 
     while (curNode->index > prevNode->index) {
         size_t charPos = (curNode->index - 1) / CHAR_BIT_COUNT;
-        char curChar = key.size() > charPos ? key[charPos] : '\0';
+        char curChar = key.size() > charPos ? std::tolower(key[charPos]) : '\0';
         uint8_t offset = (curNode->index - 1) % CHAR_BIT_COUNT;
         bool curBit = (curChar >> offset) & 1;
 
@@ -41,7 +52,7 @@ void TPatricia::Insert(const std::string &key, const uint64_t &value, const size
 
     while (curNode->index > prevNode->index && curNode->index <= index) {
         size_t charPos = (curNode->index - 1) / CHAR_BIT_COUNT;
-        char curChar = key.size() > charPos ? key[charPos] : '\0';
+        char curChar = key.size() > charPos ? std::tolower(key[charPos]) : '\0';
         uint8_t offset = (curNode->index - 1) % CHAR_BIT_COUNT;
         bool curBit = (curChar >> offset) & 1;
 
@@ -57,7 +68,7 @@ void TPatricia::Insert(const std::string &key, const uint64_t &value, const size
         prevNode->right = newNode;
     }
 
-    char newChar = key[index / CHAR_BIT_COUNT];
+    char newChar = std::tolower(key[index / CHAR_BIT_COUNT]);
     uint8_t offset = (index - 1) % CHAR_BIT_COUNT;
     bool newBit = (newChar >> offset) & 1;
 
@@ -72,8 +83,8 @@ void TPatricia::Insert(const std::string &key, const uint64_t &value, const size
 
 size_t TPatricia::CalculateNewIndex(const std::string &inputKey, const std::string &foundedKey) {
     for (size_t charPos = 0; charPos < KEY_MAX_SIZE; ++charPos) {
-        size_t foundedChar = foundedKey.size() > charPos ? foundedKey[charPos] : '\0';
-        size_t inputChar = inputKey.size() > charPos ? inputKey[charPos] : '\0';
+        char foundedChar = foundedKey.size() > charPos ? std::tolower(foundedKey[charPos]) : '\0';
+        char inputChar = inputKey.size() > charPos ? std::tolower(inputKey[charPos]) : '\0';
         for (size_t i = 0; i < CHAR_BIT_COUNT; ++i) {
             bool foundedBit = (foundedChar >> i) & 1;
             bool inputBit = (inputChar >> i) & 1;
@@ -88,7 +99,7 @@ size_t TPatricia::CalculateNewIndex(const std::string &inputKey, const std::stri
 
 uint64_t TPatricia::At(const std::string &key) {
     TNode *foundedNode = Find(key);
-    if (!foundedNode || foundedNode->key != key) {
+    if (!foundedNode || !CaseInsensitiveEqual(foundedNode->key, key)) {
         throw TNoSuchKey();
     }
     return foundedNode->value;
@@ -101,7 +112,7 @@ void TPatricia::Erase(const std::string &key) {
     // aNode - delete node, bNode - previous of delete node, cNode - pre-previous of delete Node
     auto [aNode, bNode, cNode] = FindABC(key);
 
-    if (aNode->key != key) {
+    if (!CaseInsensitiveEqual(aNode->key, key)) {
         throw TNoSuchKey();
     }
 
@@ -155,7 +166,7 @@ std::tuple<TPatricia::TNode *, TPatricia::TNode *, TPatricia::TNode *> TPatricia
 
     while (curNode->index > prevNode->index) {
         size_t charPos = (curNode->index - 1) / CHAR_BIT_COUNT;
-        char curChar = charPos > key.size() ? '\0' : key[charPos];
+        char curChar = charPos > key.size() ? '\0' : std::tolower(key[charPos]);
         uint8_t offset = (curNode->index - 1) % CHAR_BIT_COUNT;
         bool curBit = (curChar >> offset) & 1;
 

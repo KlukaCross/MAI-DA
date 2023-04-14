@@ -4,8 +4,8 @@ import sys
 import random
 import string
 
-MIN_OPERATION_COUNT = 10 ** 3
-MAX_OPERATION_COUNT = 10 ** 5
+MIN_EACH_OPERATION_COUNT = 10 ** 6
+MAX_EACH_OPERATION_COUNT = 10 ** 6
 
 
 def get_random_key():
@@ -26,6 +26,9 @@ def main():
     count_of_tests = int(sys.argv[2])
 
     actions = ["+", "-", "?"]
+    actions_count = [random.randint(MIN_EACH_OPERATION_COUNT, MAX_EACH_OPERATION_COUNT),
+                     random.randint(MIN_EACH_OPERATION_COUNT, MAX_EACH_OPERATION_COUNT),
+                     random.randint(MIN_EACH_OPERATION_COUNT, MAX_EACH_OPERATION_COUNT)]
 
     for enum in range(count_of_tests):
         keys = dict()
@@ -33,14 +36,17 @@ def main():
         with open("{0}.t".format(test_file_name), 'w') as output_file, \
                 open("{0}.a".format(test_file_name), "w") as answer_file:
 
-            for _ in range(random.randint(MIN_OPERATION_COUNT, MAX_OPERATION_COUNT)):
+            while sum(actions_count) > 0:
                 action = random.choice(actions)
+                while actions_count[actions.index(action)] == 0:
+                    action = random.choice(actions)
+                actions_count[actions.index(action)] -= 1
                 exist_element = random.choice([True, False])
                 key = random.choice([key for key in keys.keys()]) if exist_element and len(keys.keys()) > 0 else get_random_key()
                 if action == "+":
                     value: int = get_random_value()
                     output_file.write(f"+ {key} {value}\n")
-                    answer = "Exists"
+                    answer = "Exist"
                     if key.lower() not in keys:
                         answer = "OK"
                         keys[key.lower()] = value

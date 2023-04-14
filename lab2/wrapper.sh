@@ -27,7 +27,7 @@ function main()
 {
   local bin=lab2
   log_info "Stage #1. Compiling..."
-  if ! make ; then
+  if ! make lab2 ; then
     log_error "Failed to compile lab2.cpp"
     return 1
   fi
@@ -36,7 +36,7 @@ function main()
   log_info "Stage #2. Test generating..."
   rm -rf ${TESTS_DIR}
   mkdir ${TESTS_DIR}
-  local count_of_tests=3
+  local count_of_tests=1
   if ! ./test_generator.py ${TESTS_DIR} ${count_of_tests} ; then
     log_error "Failed to generate tests"
     return 1
@@ -57,6 +57,20 @@ function main()
       return 1
     fi
     log_info "${test_file}, lines=${file_line_cnt} OK"
+  done
+
+  log_info "Stage #4 Benchmarking..."
+  if ! make benchmark ; then
+    log_info "Failed to compile benchmark."
+    return 1
+  fi
+  local benchmark_bin=./benchmark
+  for test_file in $( ls ${TESTS_DIR}/*.t ) ; do
+    log_info "Running ${test_file}"
+    if ! ${benchmark_bin} < ${test_file} ; then
+      log_error "Failed to run ${benchmark_bin} for ${test_file}."
+      return 1
+    fi
   done
 }
 
