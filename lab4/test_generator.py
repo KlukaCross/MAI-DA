@@ -4,17 +4,17 @@ import sys
 import random
 import string
 
-MIN_TEXT_SIZE = 10**3
-MAX_TEXT_SIZE = 10**4
+MIN_TEXT_SIZE = 10**6
+MAX_TEXT_SIZE = 10**6
 
-MIN_PATTERN_SIZE = 3
-MAX_PATTERN_SIZE = 6
+MIN_PATTERN_SIZE = 64
+MAX_PATTERN_SIZE = 64
 
-MIN_LINE_SIZE = 1
-MAX_LINE_SIZE = 32
+MIN_LINE_SIZE = 64
+MAX_LINE_SIZE = 128
 
-CHANCE_GEN_PATTERN_EXISTS_VALUE = 0.6  # вероятность при генерации паттерна сгенерить слово, которое уже было в паттерне
-CHANCE_GEN_TEXT_EXISTS_VALUE = 0.95  # вероятность при генерации текста сгенерить слово, которое есть в паттерне
+CHANCE_GEN_PATTERN_EXISTS_VALUE = 0.3  # вероятность при генерации паттерна сгенерить слово, которое уже было в паттерне
+CHANCE_GEN_TEXT_EXISTS_VALUE = 0.6  # вероятность при генерации текста сгенерить слово, которое есть в паттерне
 
 
 def get_random_value():
@@ -25,6 +25,15 @@ def get_random_value():
 def get_random_exists_value(values):
     return random.choice(values)
 
+
+def get_line_pos(lines_info, i_in_line, n):
+    if i_in_line > n:
+        return lines_info[-1][0], i_in_line-n
+    n -= i_in_line
+    i = len(lines_info)-1
+    while lines_info[i][1] < n:
+        n -= lines_info[i][1]
+    return lines_info[i][0], lines_info[i][0]-n
 
 def main():
     if len(sys.argv) != 3:
@@ -50,17 +59,12 @@ def main():
                 open("{0}.a".format(test_file_name), "w") as answer_file:
             output_file.write(f"{' '.join(pattern)}\n")
 
-            buf_text = []
             next_break = random.randint(MIN_LINE_SIZE, MAX_LINE_SIZE)
-            lines = 1
             m = random.randint(MIN_TEXT_SIZE, MAX_TEXT_SIZE)
-            prev_sum_lines_words = 0
             for i in range(min(n, m)):
                 if i == next_break:
-                    prev_sum_lines_words = i
                     output_file.write("\n")
                     next_break += random.randint(MIN_LINE_SIZE, MAX_LINE_SIZE)
-                    lines += 1
 
                 if random.random() <= CHANCE_GEN_TEXT_EXISTS_VALUE:
                     text = get_random_exists_value(pattern)
@@ -68,17 +72,11 @@ def main():
                     text = get_random_value()
 
                 output_file.write(f" {text}")
-                buf_text.append(text)
-
-            if pattern == buf_text:
-                answer_file.write(f"{lines}, {i-prev_sum_lines_words-n+1}")
 
             for i in range(n, m):
                 if i == next_break:
-                    prev_sum_lines_words = i
                     output_file.write("\n")
                     next_break += random.randint(MIN_LINE_SIZE, MAX_LINE_SIZE)
-                    lines += 1
 
                 if random.random() <= CHANCE_GEN_TEXT_EXISTS_VALUE:
                     text = get_random_exists_value(pattern)
@@ -86,13 +84,6 @@ def main():
                     text = get_random_value()
 
                 output_file.write(f" {text}")
-                buf_text.pop(0)
-                buf_text.append(text)
-
-                if pattern == buf_text:
-                    answer_file.write(f"{lines}, {i-prev_sum_lines_words-n+2}\n")
-
-
 
 
 if __name__ == "__main__":
