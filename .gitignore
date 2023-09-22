@@ -33,4 +33,7 @@
 
 *.idea
 *cmake-build*
-*venv
+*/venv
+*/tests
+*/my_tests
+*/all.cpp

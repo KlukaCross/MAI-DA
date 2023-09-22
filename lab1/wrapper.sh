@@ -41,8 +41,8 @@ function main()
 
   log_info "Stage #3 Checking..."
   for test_file in $( ls ${test_dir}/*.t ) ; do
-    local tmp_output=tmp
-    if ! ./lab1 < ${test_file} > ${tmp_output} ; then
+    local tmp_output=tmp.out
+    if ! ./lab1.out < ${test_file} > ${tmp_output} ; then
       log_error "Failed to run test"
       return 1
     fi
@@ -60,7 +60,7 @@ function main()
     log_info "Failed to compile benchmark."
     return 1
   fi
-  local benchmark_bin=./benchmark
+  local benchmark_bin=./benchmark.out
   for test_file in $( ls ${test_dir}/*.t ) ; do
     log_info "Running ${test_file}"
     if ! ${benchmark_bin} < ${test_file} ; then

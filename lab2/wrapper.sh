@@ -25,7 +25,7 @@ function log_()
 
 function main()
 {
-  local bin=lab2
+  local bin=lab2.out
   log_info "Stage #1. Compiling..."
   if ! make lab2 ; then
     log_error "Failed to compile lab2.cpp"
@@ -45,7 +45,7 @@ function main()
 
   log_info "Stage #3 Checking..."
   for test_file in $( ls ${TESTS_DIR}/*.t ) ; do
-    local tmp_output=tmp
+    local tmp_output=tmp.out
     if ! ./${bin} < ${test_file} > ${tmp_output} ; then
       log_error "Failed to run test"
       return 1
@@ -64,7 +64,7 @@ function main()
     log_info "Failed to compile benchmark."
     return 1
   fi
-  local benchmark_bin=./benchmark
+  local benchmark_bin=./benchmark.out
   for test_file in $( ls ${TESTS_DIR}/*.t ) ; do
     log_info "Running ${test_file}"
     if ! ${benchmark_bin} < ${test_file} ; then
