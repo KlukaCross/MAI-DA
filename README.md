@@ -7,3 +7,4 @@
 | 2      | PATRICIA    |
 | 3      | -           |
 | 4      | Boyer-Moore |
+| 5      | 4           |
