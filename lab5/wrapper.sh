@@ -28,7 +28,7 @@ function main()
   local bin=lab5.out
   log_info "Stage #1. Compiling..."
   if ! make lab5 ; then
-    log_error "Failed to compile lab5.cpp"
+    log_error "Failed to compile main.cpp"
     return 1
   fi
   log_info "Compiling OK"
@@ -36,7 +36,7 @@ function main()
   log_info "Stage #2. Test generating..."
   rm -rf ${TESTS_DIR}
   mkdir ${TESTS_DIR}
-  local count_of_tests=5
+  local count_of_tests=7
   if ! ./test_generator.py ${TESTS_DIR} ${count_of_tests} ; then
     log_error "Failed to generate tests"
     return 1

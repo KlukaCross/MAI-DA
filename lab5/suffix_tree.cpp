@@ -46,7 +46,7 @@ void TSuffixTree::Build() {
 
                 if (text[nextNode->start + currentEdgeLength] == text[i]) { // if edge starts with text[phase] (rule 3)
                     ++currentEdgeLength;
-                    if (lastCreatedNode) {
+                    if (lastCreatedNode and currentNode != root) {
                         lastCreatedNode->suffixLink = currentNode;
                     }
                     break;
@@ -58,7 +58,7 @@ void TSuffixTree::Build() {
                 nextNode->start += currentEdgeLength;
                 newNode->children[text[nextNode->start]] = nextNode;
                 newNode->children[text[i]] = new TNode(i, globalEnd, j, root);
-                if (lastCreatedNode and currentNode != root) {
+                if (lastCreatedNode) {
                     lastCreatedNode->suffixLink = newNode;
                 }
                 lastCreatedNode = newNode;
