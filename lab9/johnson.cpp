@@ -5,27 +5,34 @@
 #include "dijkstra.hpp"
 
 
-TMatrix Johnson(const TMatrix &g) {
-    int n = g.size();
-    TMatrix answer(n, std::vector<int>(n));
-    TMatrix gd = g;
-    std::vector<int> h(n+1, INT_MAX);
-    gd.emplace_back(n, 0);
+TGraph Johnson(const TGraph &g, int n) {
+    TGraph answer;
+    TGraph gd = g;
+    std::vector<long> h;
+    gd[n] = std::vector<TNode>(n);
+    for (int i = 0; i < n; ++i) {
+        gd[n][i].v = i;
+        gd[n][i].w = 0;
+    }
 
-    bool negativeCycleExists = BellmanFord(gd, n, h);
-    if (negativeCycleExists)
+    bool negativeCycleNotExists = BellmanFord(gd, n+1, n, h);
+    if (!negativeCycleNotExists)
         throw TNegativeCycle();
 
     for (int i = 0; i < n+1; ++i) {
-        for (int j = 0; j < n; ++j) {
-            gd[i][j] += h[i] - h[j];
+        if (gd.find(i) == gd.end())
+            continue;
+        for (TNode &node: gd[i]) {
+            node.w += h[i] - h[node.v];
         }
     }
     for (int i = 0; i < n; ++i) {
-        std::vector<int> delta = Dijkstra(gd, i);
+        std::vector<long> delta = Dijkstra(gd, n, i);
+        answer[i] = std::vector<TNode>();
         for (int j = 0; j < n; ++j) {
-            answer[i][j] = delta[j] + h[j] - h[i];
+            answer[i].emplace_back(j, delta[j] == LONG_MAX ? delta[j] : delta[j] + h[j] - h[i]);
         }
     }
     return answer;
 }
+

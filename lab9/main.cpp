@@ -10,31 +10,35 @@ int main() {
 
     int n, m;
     std::cin >> n >> m;
-    TMatrix g(n, std::vector<int>(n, INT_MAX));
-    for (int i = 0; i < n; ++i) {
-        g[i][i] = 0;
-    }
+    TGraph g;
     for (int i = 0; i < m; ++i) {
-        int a, b, w;
-        std::cin >> a >> b >> w;
-        g[a][b] = w;
+        int u, v, w;
+        std::cin >> u >> v >> w;
+        if (g.find(u-1) == g.end()) {
+            g[u-1] = std::vector<TNode>();
+        }
+        g[u-1].emplace_back(v-1, w);
     }
 
     try {
-        TMatrix answer = Johnson(g);
+        TGraph answer = Johnson(g, n);
+        std::vector<std::vector<long>> matrix(n, std::vector<long>(n, LONG_MAX));
+        for (int i = 0; i < n; ++i) {
+            for (TNode &p: answer[i]) {
+                matrix[i][p.v] = p.w;
+            }
+        }
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
-                if (answer[i][j] == INTMAX_MAX)
+                if (matrix[i][j] == LONG_MAX)
                     std::cout << "inf ";
                 else
-                    std::cout << answer[i][j] << " ";
+                    std::cout << matrix[i][j] << " ";
             }
             std::cout << '\n';
         }
     } catch (TNegativeCycle &e) {
         std::cout << "Negative cycle\n";
     }
-
-    std::cout << "Hello, World!" << std::endl;
     return 0;
 }

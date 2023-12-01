@@ -3,6 +3,6 @@
 
 #include "types.hpp"
 
-TMatrix Johnson(const TMatrix &g);
+TGraph Johnson(const TGraph &g, int n);
 
 #endif //LAB9_JOHNSON_HPP

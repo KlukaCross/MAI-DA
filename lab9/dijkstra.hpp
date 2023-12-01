@@ -3,6 +3,6 @@
 
 #include "types.hpp"
 
-std::vector<int> Dijkstra(const TMatrix &g, int start);
+std::vector<long> Dijkstra(TGraph &g, int n, int start);
 
 #endif //LAB9_DIJKSTRA_HPP

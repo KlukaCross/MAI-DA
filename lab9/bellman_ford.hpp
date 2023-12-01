@@ -3,6 +3,6 @@
 
 #include "types.hpp"
 
-bool BellmanFord(const TMatrix &g, int start, std::vector<int> &h);
+bool BellmanFord(TGraph &g, int n, int start, std::vector<long> &h);
 
 #endif //LAB9_BELLMAN_FORD_HPP
