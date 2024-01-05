@@ -40,7 +40,6 @@ int main(int argc, char *argv[]) {
     if (command == "index") {
         db->loadFromNamesFile(inputFile);
         db->saveToFile(outputFile);
-        std::cout << "OK\n";
     } else {
         db->loadFromIndexFile(indexFile);
         Audiosearch audiosearch(db);
@@ -57,7 +56,7 @@ int main(int argc, char *argv[]) {
             fin.getline(buff, FILENAME_LIMIT_SIZE);
             if (buff[0] == '\0')
                 break;
-            std::string answer = audiosearch.search(std::string(buff));
+            std::string answer = audiosearch.search(std::string(buff)) + "\n";
             fout.write(answer.data(), answer.size());
         }
     }

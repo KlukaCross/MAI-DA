@@ -4,7 +4,6 @@
 #include "minimp3.h"
 #include "minimp3_ex.h"
 
-const size_t FUZZ_FACTOR = 2;
 const size_t WINDOW_SIZE = 4096, WINDOW_STEP = 1024;
 
 std::vector<complex> hunn(const std::vector<short>& data, size_t start, size_t end) {
@@ -39,7 +38,7 @@ void fft(std::vector<complex> & data) {
 uint64_t hash(const std::vector<short>& frequency) {
     uint64_t res = 0;
     for (size_t i = 0; i < frequency.size(); ++i) {
-        res += (frequency[i] - (frequency[i] % FUZZ_FACTOR)) * std::pow(1000, i);
+        res += frequency[i] * std::pow(1000, i);
     }
     return res;
 }
@@ -61,7 +60,7 @@ std::vector<uint64_t> calculateHashes(const std::vector<short>& data) {
         std::vector<short> maxFrequency(freq_ranges_size, 0);
         std::vector<double> maxPower(freq_ranges_size, -1);
         for (short freq = FREQUENCY_RANGES[0]; freq < FREQUENCY_RANGES[freq_ranges_size-1]; ++freq) {
-            double power =  std::abs(transformData[freq]);
+            double power = std::abs(transformData[freq]);
             size_t index = getFrequencyIndex(freq);
             if (power > maxPower[index]) {
                 maxPower[index] = power;
