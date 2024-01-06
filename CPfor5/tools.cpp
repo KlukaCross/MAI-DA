@@ -43,7 +43,7 @@ uint64_t hash(const std::vector<short>& frequency) {
     return res;
 }
 
-size_t getFrequencyIndex(size_t frequency) {
+size_t getFrequencyIndex(short frequency) {
     size_t i = 0;
     while (FREQUENCY_RANGES[i] < frequency)
         ++i;

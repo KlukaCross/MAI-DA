@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
         std::cout << "Wrong command " << command << "\n";
         return 0;
     }
-    for (size_t i = 2; i < argc; i+=2) {
+    for (int i = 2; i < argc; i+=2) {
         std::string flag(argv[i]), value(argv[i+1]);
         if (flag == "--index")
             indexFile = value;

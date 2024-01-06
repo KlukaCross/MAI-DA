@@ -1,13 +1,10 @@
 CXX = g++
 CXXFLAGS = -std=c++2a -pedantic -Wall -Wextra -Werror
 
-all: cp cp_profiler
+all: audiosearch
 
-cp: main.cpp minimp3.h minimp3_ex.h
-	$(CXX) $(CXXFLAGS) main.cpp -o cp.out
-
-cp_profiler: main.cpp minimp3.h minimp3_ex.h
-	$(CXX) $(CXXFLAGS) -pg main.cpp -o cp_profiler.out
+audiosearch: main.cpp minimp3.h minimp3_ex.h audiosearch.cpp database.cpp tools.cpp
+	$(CXX) $(CXXFLAGS) main.cpp audiosearch.cpp database.cpp tools.cpp -o audiosearch.out
 
 clean:
-	rm -f cp.out cp_profiler.out *.o
+	rm -f audiosearch.out *.o

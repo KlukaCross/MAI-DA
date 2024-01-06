@@ -51,7 +51,7 @@ void Database::loadFromIndexFile(const std::string &filename) {
     for (size_t i = 0; i < musicNamesNumber; ++i) {
         size_t musicNameSize;
         fin >> musicNameSize;
-        char musicName[musicNameSize+1];
+        char musicName[FILENAME_LIMIT_SIZE];
         musicName[musicNameSize] = '\0';
         fin.read(&devnull, 1);
         fin.read(musicName, musicNameSize);

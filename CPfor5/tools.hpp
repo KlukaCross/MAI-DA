@@ -13,7 +13,7 @@ std::vector<uint64_t> calculateHashes(const std::vector<short>& data);
 
 uint64_t hash(const std::vector<short>& frequency);
 
-size_t getFrequencyIndex(size_t frequency);
+size_t getFrequencyIndex(short frequency);
 
 std::vector<short> decoder(const std::string& filename);
 
